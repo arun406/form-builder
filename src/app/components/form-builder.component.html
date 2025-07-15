@@ -1,0 +1,315 @@
+<div class="form-builder-container">
+  <!-- Left Panel - Available Elements -->
+  <div class="left-panel">
+    <div class="search-bar-container">
+      <input type="text" class="search-bar" placeholder="Search" [(ngModel)]="searchTerm" />
+    </div>
+    <div class="elements-list">
+      <ng-container *ngFor="let category of uniqueCategories">
+        <div class="category-title">
+          {{ category }}
+        </div>
+        <div class="category-elements">
+          <div 
+            *ngFor="let element of getElementsByCategory(category)"
+            class="element-item"
+            draggable="true"
+            (dragstart)="onDragStart($event, element)"
+          >
+            <span class="element-icon">{{ element.icon }}</span>
+            <span class="element-label">{{ element.label }}</span>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+
+  <!-- Center Panel - Form Building Area -->
+  <div class="center-panel">
+    <div class="form-canvas">
+      
+      <div class="canvas-header">
+        <h2>Form Builder</h2>
+        <p>Drag elements from the left panel to build your form</p>
+      </div>
+
+      <div class="form-elements-container"
+           (dragover)="onFormAreaDragOver($event)"
+           (drop)="onFormAreaDrop($event)"
+           (dragleave)="onFormAreaDragLeave($event)">
+        
+        <div class="stacked-elements">
+          <!-- Drop zone at the beginning -->
+          <div class="drop-zone" 
+               [class.drop-zone-active]="activeDropZone === 0">
+            <div *ngIf="activeDropZone === 0" class="drop-indicator">
+              <span class="drop-text">Drop here</span>
+            </div>
+          </div>
+          
+          <!-- Form elements with drop zones -->
+          <ng-container *ngFor="let element of formElements; let i = index; trackBy: trackByElementId">
+            <!-- Form element -->
+            <div 
+              class="form-element"
+              [class.selected]="selectedElementId === element.id"
+              [class.dragging]="isDragging"
+              draggable="true"
+              (dragstart)="onElementDragStart($event, element)"
+              (dragend)="onElementDragEnd($event, element)"
+              (dragover)="onElementDragOver($event)"
+              (drop)="onElementDrop($event, element)"
+              (click)="setSelectedElement(element.id)"
+              (focusin)="setSelectedElement(element.id)"
+              (focusout)="clearSelectedElement()"
+              tabindex="0"
+            >
+              <div class="element-header">
+                <span class="element-type">
+                  {{ getElementIcon(element.type) }}
+                </span>
+              </div>
+              <div *ngIf="selectedElementId === element.id" class="action-bar">
+                <button class="action-btn" aria-label="Settings">
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3.2"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 8 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 5 15.4a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 5 8.6a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 8 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09A1.65 1.65 0 0 0 16 4.6a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l.06.06A1.65 1.65 0 0 0 19 8.6a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09A1.65 1.65 0 0 0 19 15.4z"/></svg>
+                  <span class="custom-tooltip">Settings</span>
+                </button>
+                <button class="action-btn" aria-label="Duplicate">
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#009688" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="8" width="10" height="10" rx="2"/><rect x="4" y="4" width="10" height="10" rx="2"/><path d="M12 12h4v4"/></svg>
+                  <span class="custom-tooltip">Duplicate</span>
+                </button>
+                <button class="action-btn" aria-label="Delete Field" (mousedown)="onDeleteMouseDown($event)" (click)="requestRemoveElement(element.id); $event.stopPropagation();">
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 6h18"/>
+                    <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                    <rect x="5" y="6" width="14" height="14" rx="2"/>
+                    <path d="M10 11v6"/>
+                    <path d="M14 11v6"/>
+                  </svg>
+                  <span class="custom-tooltip">Delete Field</span>
+                </button>
+              </div>
+              <div class="element-content">
+                <!-- Preview for each type -->
+                <ng-container [ngSwitch]="element.type">
+                  <!-- Grid -->
+                  <div *ngSwitchCase="'grid-1'" class="preview-grid">1-Column Grid</div>
+                  <div *ngSwitchCase="'grid-2'" class="preview-grid">2-Column Grid</div>
+                  <div *ngSwitchCase="'grid-3'" class="preview-grid">3-Column Grid</div>
+                  <!-- Name: two-column layout -->
+                  <div *ngSwitchCase="'name'" class="preview-name-fields">
+                    <div class="name-input-group">
+                      <div class="input-with-icon">
+                        <span class="input-icon">&#128100;</span>
+                        <input type="text" placeholder="First Name" disabled />
+                      </div>
+                      <span class="input-label">First Name</span>
+                    </div>
+                    <div class="name-input-group">
+                      <div class="input-with-icon">
+                        <span class="input-icon">&#128100;</span>
+                        <input type="text" placeholder="Last Name" disabled />
+                      </div>
+                      <span class="input-label">Last Name</span>
+                    </div>
+                  </div>
+                  <!-- Email: single input with icon and label -->
+                  <div *ngSwitchCase="'email'" class="preview-email">
+                    <div class="input-with-icon">
+                      <input type="email" placeholder="Email" disabled />
+                      <span class="input-icon">&#9993;</span>
+                    </div>
+                    <span class="input-label">Email</span>
+                  </div>
+                  <!-- Phone: single input with icon and label -->
+                  <div *ngSwitchCase="'phone'" class="preview-phone">
+                    <div class="input-with-icon">
+                      <input type="tel" placeholder="Phone Number" disabled />
+                      <span class="input-icon">&#128241;</span>
+                    </div>
+                    <span class="input-label">Phone</span>
+                  </div>
+                  <!-- Single Line: single input with icon and label -->
+                  <div *ngSwitchCase="'textbox-single'" class="preview-single-line">
+                    <div class="input-with-icon">
+                      <input type="text" placeholder="Single Line" disabled />
+                      <span class="input-icon">&#128221;</span>
+                    </div>
+                    <span class="input-label">Single Line</span>
+                  </div>
+                  <div *ngSwitchCase="'textbox-multi'" class="preview-basic"><textarea placeholder="Multi Line" disabled></textarea></div>
+                  <!-- Number -->
+                  <div *ngSwitchCase="'number'" class="preview-number">
+                    <div class="input-with-icon">
+                      <input type="number" placeholder="Number" disabled />
+                      <span class="input-icon">&#35;&#35;</span>
+                    </div>
+                    <span class="input-label">Number</span>
+                  </div>
+                  <div *ngSwitchCase="'decimal'" class="preview-decimal">
+                    <div class="input-with-icon">
+                      <input type="number" step="0.01" placeholder="Decimal" disabled />
+                      <span class="input-icon">&#128178;</span>
+                    </div>
+                    <span class="input-label">Decimal</span>
+                  </div>
+                  <div *ngSwitchCase="'formula'" class="preview-formula">
+                    <div class="input-with-icon">
+                      <input type="text" placeholder="Formula" disabled />
+                      <span class="input-icon">&#120;</span>
+                    </div>
+                    <span class="input-label">Formula</span>
+                  </div>
+                  <div *ngSwitchCase="'currency'" class="preview-currency">
+                    <div class="input-with-icon">
+                      <input type="text" placeholder="Currency" disabled />
+                      <span class="input-icon">&#36;</span>
+                    </div>
+                    <span class="input-label">Currency</span>
+                  </div>
+                  <!-- Choices -->
+                  <div *ngSwitchCase="'dropdown'" class="dropdown-preview">
+                    <select disabled>
+                      <option value="">Select an option</option>
+                      <option>Option 1</option>
+                      <option>Option 2</option>
+                    </select>
+                  </div>
+                  <div *ngSwitchCase="'radio'" class="preview-basic">
+                    <label><input type="radio" disabled> Option 1</label>
+                    <label><input type="radio" disabled> Option 2</label>
+                  </div>
+                  <div *ngSwitchCase="'checkbox'" class="preview-basic">
+                    <label><input type="checkbox" disabled> Option 1</label>
+                    <label><input type="checkbox" disabled> Option 2</label>
+                  </div>
+                  <div *ngSwitchCase="'multiple-choice'" class="preview-basic">
+                    <label><input type="checkbox" disabled> Choice 1</label>
+                    <label><input type="checkbox" disabled> Choice 2</label>
+                  </div>
+                  <div *ngSwitchCase="'image-choices'" class="preview-basic">
+                    <span>Image Choices Preview</span>
+                  </div>
+                  <div *ngSwitchCase="'matrix-choice'" class="preview-basic">
+                    <span>Matrix Choice Preview</span>
+                  </div>
+                  <!-- Date & Time -->
+                  <div *ngSwitchCase="'date'" class="preview-date">
+                    <div class="input-with-icon">
+                      <input type="date" placeholder="Date" disabled />
+                      <span class="input-icon">&#128197;</span>
+                    </div>
+                    <span class="input-label">Date</span>
+                  </div>
+                  <div *ngSwitchCase="'time'" class="preview-time">
+                    <div class="input-with-icon">
+                      <input type="time" placeholder="Time" disabled />
+                      <span class="input-icon">&#9200;</span>
+                    </div>
+                    <span class="input-label">Time</span>
+                  </div>
+                  <div *ngSwitchCase="'date-time'" class="preview-date-time">
+                    <div class="input-with-icon">
+                      <input type="datetime-local" placeholder="Date-Time" disabled />
+                      <span class="input-icon">&#128198;</span>
+                    </div>
+                    <span class="input-label">Date-Time</span>
+                  </div>
+                  <div *ngSwitchCase="'month-year'" class="preview-month-year">
+                    <div class="input-with-icon">
+                      <input type="month" placeholder="Month-Year" disabled />
+                      <span class="input-icon">&#128198;</span>
+                    </div>
+                    <span class="input-label">Month-Year</span>
+                  </div>
+                  <!-- Uploads -->
+                  <div *ngSwitchCase="'file-upload'" class="preview-basic"><input type="file" disabled></div>
+                  <div *ngSwitchCase="'image-upload'" class="preview-basic"><input type="file" accept="image/*" disabled></div>
+                  <div *ngSwitchCase="'audio-video-upload'" class="preview-basic"><input type="file" accept="audio/*,video/*" disabled></div>
+                  <!-- Rating Scales -->
+                  <div *ngSwitchCase="'rating'" class="preview-basic"><span>★ ★ ★ ★ ★</span></div>
+                  <div *ngSwitchCase="'slider'" class="preview-basic"><input type="range" min="1" max="5" disabled></div>
+                  <!-- Website: single input with icon and label -->
+                  <div *ngSwitchCase="'website'" class="preview-website">
+                    <div class="input-with-icon">
+                      <input type="url" placeholder="Website" disabled />
+                      <span class="input-icon">🌐</span>
+                    </div>
+                  </div>
+                  <span *ngSwitchCase="'website'" class="input-label">Website</span>
+                  <!-- Address: modern layout -->
+                  <div *ngSwitchCase="'address'" class="preview-address-fields">
+                    <!-- <div class="address-title">Address</div> -->
+                    <div class="address-input-row">
+                      <div class="address-input-group">
+                        <div class="input-with-icon">
+                          <input type="text" placeholder="Street Address" disabled />
+                        </div>
+                        <span class="input-label">Street Address</span>
+                      </div>
+                    </div>
+                    <div class="address-input-row">
+                      <div class="address-input-group">
+                        <div class="input-with-icon">
+                          <input type="text" placeholder="Address Line 2" disabled />
+                        </div>
+                        <span class="input-label">Address Line 2</span>
+                      </div>
+                    </div>
+                    <div class="address-input-row address-row-2col">
+                      <div class="address-input-group">
+                        <div class="input-with-icon">
+                          <input type="text" placeholder="City" disabled />
+                        </div>
+                        <span class="input-label">City</span>
+                      </div>
+                      <div class="address-input-group">
+                        <div class="input-with-icon">
+                          <input type="text" placeholder="State/Region/Province" disabled />
+                        </div>
+                        <span class="input-label">State/Region/Province</span>
+                      </div>
+                    </div>
+                    <div class="address-input-row address-row-2col">
+                      <div class="address-input-group">
+                        <div class="input-with-icon">
+                          <input type="text" placeholder="Postal / Zip Code" disabled />
+                        </div>
+                        <span class="input-label">Postal / Zip Code</span>
+                      </div>
+                      <div class="address-input-group">
+                        <div class="input-with-icon">
+                          <select disabled>
+                            <option>-Select-</option>
+                          </select>
+                        </div>
+                        <span class="input-label">Country</span>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Default -->
+                  <div *ngSwitchDefault class="preview-basic"><input type="text" disabled></div>
+                </ng-container>
+              </div>
+            </div>
+            
+            <!-- Drop zone after each element -->
+            <div class="drop-zone" 
+                 [class.drop-zone-active]="activeDropZone === i + 1">
+              <div *ngIf="activeDropZone === i + 1" class="drop-indicator">
+                <span class="drop-text">Drop here</span>
+              </div>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Confirm Delete Dialog -->
+<app-confirm-delete-dialog 
+  [open]="showDeleteDialog" 
+  (confirm)="confirmDelete()" 
+  (cancel)="cancelDelete()">
+</app-confirm-delete-dialog> 

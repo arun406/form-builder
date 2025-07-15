@@ -1,0 +1,15 @@
+<div class="modal-backdrop" *ngIf="open" (click)="onCancel()">
+  <div class="modal-dialog" (click)="onDialogClick($event)">
+    <div class="modal-header">
+      <span class="modal-title">Delete Field</span>
+      <button class="close-btn" (click)="onCancel()" aria-label="Close">&times;</button>
+    </div>
+    <div class="modal-body">
+      <p>Upon deleting this field, the data associated with it will be deleted and cannot be retrieved.</p>
+    </div>
+    <div class="modal-footer">
+      <button class="cancel-btn" (click)="onCancel()">Cancel</button>
+      <button class="delete-btn" (click)="onConfirm()">Yes, Delete</button>
+    </div>
+  </div>
+</div> 
