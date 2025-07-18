@@ -64,16 +64,16 @@
                 <span class="element-type">
                   {{ getElementIcon(element.type) }}
                 </span>
-              </div>
-              <div class="action-bar">
-                <app-action-bar
-                  [elementId]="element.id"
-                  [selected]="selectedElementId === element.id"
-                  [isDragging]="isDragging"
-                  (settings)="onSettingsClick(element)"
-                  (duplicate)="onDuplicateClick(element)"
-                  (delete)="requestRemoveElement(element.id)"
-                ></app-action-bar>
+                <div class="action-bar">
+                  <app-action-bar
+                    [elementId]="element.id"
+                    [selected]="selectedElementId === element.id"
+                    [isDragging]="isDragging"
+                    (settings)="onSettingsClick(element)"
+                    (duplicate)="onDuplicateClick(element)"
+                    (delete)="requestRemoveElement(element.id)"
+                  ></app-action-bar>
+                </div>
               </div>
               <div class="element-content">
                 <!-- Preview for each type -->
