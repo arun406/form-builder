@@ -8,12 +8,12 @@
   align-items: center;
   gap: 0.75rem;
   padding: 0.5rem 1rem;
-  background: rgba(255, 255, 255, 0.1);
+  /* background: rgba(255, 255, 255, 0.1); */
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.2s ease;
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  /* border: 1px solid rgba(255, 255, 255, 0.2); */
 }
 
 .user-info:hover {
@@ -25,11 +25,18 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
-  background: rgba(255, 255, 255, 0.2);
+  width: 40px;
+  height: 40px;
+  /* background: #23272f; */
   border-radius: 50%;
-  color: white;
+  color: var(--color-text);
+  overflow: hidden;
+}
+.avatar svg {
+  width: 28px;
+  height: 28px;
+  display: block;
+  background: none;
 }
 
 .user-details {
@@ -39,9 +46,9 @@
 }
 
 .user-name {
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: white;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color:var(--color-text);
   line-height: 1;
 }
 
@@ -67,15 +74,16 @@
   top: 100%;
   right: 0;
   margin-top: 0.5rem;
-  background: white;
+  background: #181a20;
   border-radius: 8px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
   min-width: 200px;
   opacity: 0;
   visibility: hidden;
   transform: translateY(-10px);
   transition: all 0.2s ease;
   z-index: 1000;
+  border: 1px solid #23272f;
 }
 
 .dropdown-menu.open {
@@ -89,23 +97,25 @@
   align-items: center;
   gap: 0.75rem;
   padding: 0.75rem 1rem;
-  color: #333;
+  color: #b0b3b8;
   cursor: pointer;
-  transition: background-color 0.2s ease;
-  font-size: 0.875rem;
+  transition: background-color 0.2s ease, color 0.2s;
+  font-size: 0.95rem;
+  background: transparent;
 }
 
 .dropdown-item:hover {
-  background-color: #f8f9fa;
+  background-color: #23272f;
+  color: #fff;
 }
 
 .dropdown-item svg {
-  color: #6c757d;
+  color: #b0b3b8;
 }
 
 .dropdown-divider {
   height: 1px;
-  background-color: #e9ecef;
+  background-color: #23272f;
   margin: 0.5rem 0;
 }
 

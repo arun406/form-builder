@@ -50,8 +50,12 @@
               (dragend)="onElementDragEnd($event, element)"
               (dragover)="onElementDragOver($event)"
               (drop)="onElementDrop($event, element)"
-              (click)="setSelectedElement(element.id); hoveredElementId = element.id"
-              (focusin)="setSelectedElement(element.id); hoveredElementId = element.id"
+              (click)="
+                setSelectedElement(element.id); hoveredElementId = element.id
+              "
+              (focusin)="
+                setSelectedElement(element.id); hoveredElementId = element.id
+              "
               (focusout)="clearSelectedElement(); hoveredElementId = null"
               tabindex="0"
               [attr.data-element-id]="element.id"
@@ -74,19 +78,18 @@
               <div class="element-content">
                 <!-- Preview for each type -->
                 <ng-container [ngSwitch]="element.type">
-                  
                   <!-- Name: two-column layout -->
                   <div *ngSwitchCase="'name'" class="preview-name-fields">
                     <div class="name-input-group">
                       <div class="input-with-icon">
-                        <span class="input-icon">&#128100;</span>
+                        <!-- <span class="input-icon">&#128100;</span> -->
                         <input type="text" placeholder="First Name" disabled />
                       </div>
                       <span class="input-label">First Name</span>
                     </div>
                     <div class="name-input-group">
                       <div class="input-with-icon">
-                        <span class="input-icon">&#128100;</span>
+                        <!-- <span class="input-icon">&#128100;</span> -->
                         <input type="text" placeholder="Last Name" disabled />
                       </div>
                       <span class="input-label">Last Name</span>
@@ -96,7 +99,7 @@
                   <div *ngSwitchCase="'email'" class="preview-email">
                     <div class="input-with-icon">
                       <input type="email" placeholder="Email" disabled />
-                      <span class="input-icon">&#9993;</span>
+                      <!-- <span class="input-icon">&#9993;</span> -->
                     </div>
                     <span class="input-label">Email</span>
                   </div>
@@ -104,7 +107,7 @@
                   <div *ngSwitchCase="'phone'" class="preview-phone">
                     <div class="input-with-icon">
                       <input type="tel" placeholder="Phone Number" disabled />
-                      <span class="input-icon">&#128241;</span>
+                      <!-- <span class="input-icon">&#128241;</span> -->
                     </div>
                     <span class="input-label">Phone</span>
                   </div>
@@ -115,7 +118,7 @@
                   >
                     <div class="input-with-icon">
                       <input type="text" placeholder="Single Line" disabled />
-                      <span class="input-icon">&#128221;</span>
+                      <!-- <span class="input-icon">&#128221;</span> -->
                     </div>
                     <span class="input-label">Single Line</span>
                   </div>
@@ -126,7 +129,7 @@
                   <div *ngSwitchCase="'number'" class="preview-number">
                     <div class="input-with-icon">
                       <input type="number" placeholder="Number" disabled />
-                      <span class="input-icon">&#35;&#35;</span>
+                      <!-- <span class="input-icon">&#35;&#35;</span> -->
                     </div>
                     <span class="input-label">Number</span>
                   </div>
@@ -138,21 +141,21 @@
                         placeholder="Decimal"
                         disabled
                       />
-                      <span class="input-icon">&#128178;</span>
+                      <!-- <span class="input-icon">&#128178;</span> -->
                     </div>
                     <span class="input-label">Decimal</span>
                   </div>
                   <div *ngSwitchCase="'formula'" class="preview-formula">
                     <div class="input-with-icon">
                       <input type="text" placeholder="Formula" disabled />
-                      <span class="input-icon">&#120;</span>
+                      <!-- <span class="input-icon">&#120;</span> -->
                     </div>
                     <span class="input-label">Formula</span>
                   </div>
                   <div *ngSwitchCase="'currency'" class="preview-currency">
                     <div class="input-with-icon">
                       <input type="text" placeholder="Currency" disabled />
-                      <span class="input-icon">&#36;</span>
+                      <!-- <span class="input-icon">&#36;</span> -->
                     </div>
                     <span class="input-label">Currency</span>
                   </div>
@@ -186,14 +189,14 @@
                   <div *ngSwitchCase="'date'" class="preview-date">
                     <div class="input-with-icon">
                       <input type="date" placeholder="Date" disabled />
-                      <span class="input-icon">&#128197;</span>
+                      <!-- <span class="input-icon">&#128197;</span> -->
                     </div>
                     <span class="input-label">Date</span>
                   </div>
                   <div *ngSwitchCase="'time'" class="preview-time">
                     <div class="input-with-icon">
                       <input type="time" placeholder="Time" disabled />
-                      <span class="input-icon">&#9200;</span>
+                      <!-- <span class="input-icon">&#9200;</span> -->
                     </div>
                     <span class="input-label">Time</span>
                   </div>
@@ -204,14 +207,14 @@
                         placeholder="Date-Time"
                         disabled
                       />
-                      <span class="input-icon">&#128198;</span>
+                      <!-- <span class="input-icon">&#128198;</span> -->
                     </div>
                     <span class="input-label">Date-Time</span>
                   </div>
                   <div *ngSwitchCase="'month-year'" class="preview-month-year">
                     <div class="input-with-icon">
                       <input type="month" placeholder="Month-Year" disabled />
-                      <span class="input-icon">&#128198;</span>
+                      <!-- <span class="input-icon">&#128198;</span> -->
                     </div>
                     <span class="input-label">Month-Year</span>
                   </div>
@@ -239,7 +242,7 @@
                   <div *ngSwitchCase="'website'" class="preview-website">
                     <div class="input-with-icon">
                       <input type="url" placeholder="Website" disabled />
-                      <span class="input-icon">🌐</span>
+                      <!-- <span class="input-icon">🌐</span> -->
                     </div>
                   </div>
                   <span *ngSwitchCase="'website'" class="input-label"

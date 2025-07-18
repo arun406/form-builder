@@ -1,15 +1,15 @@
 .action-bar {
   position: absolute;
   top: 0;
-  right: 0;
+  right: -64px;
   height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  background: #fff;
+  background: var(--color-bg-secondary);
   border-radius: 0;
-  box-shadow: 0 2px 12px rgba(60,60,60,0.13);
-  border: 1px solid #ececec;
+  box-shadow: 0 2px 12px var(--color-shadow);
+  border: 1px solid var(--color-border);
   min-width: 56px;
   overflow: hidden;
   z-index: 20;
@@ -24,19 +24,33 @@
   justify-content: center;
   cursor: pointer;
   transition: background 0.15s;
-  border-bottom: 1px solid #f2f2f2;
+  border-bottom: 1px solid var(--color-border);
   padding: 0;
   position: relative;
-  font-size: 1.6rem;
 }
 .action-btn:last-child {
   border-bottom: none;
 }
 .action-btn:hover {
-  background: #f5f5f5;
+  background: var(--color-bg-secondary);
+}
+.action-btn svg {
+  width: 28px;
+  height: 28px;
+  stroke-width: 2.2;
+  stroke: var(--color-border);
+}
+.action-btn[title="Delete Field"] svg {
+  stroke: var(--color-danger);
+}
+.action-btn[title="Duplicate"] svg {
+  stroke: #009688;
+}
+.action-btn[title="Settings"] svg {
+  stroke: var(--color-border);
 }
 .action-btn .custom-tooltip {
-  /* visibility: hidden; */
+  visibility: hidden;
   opacity: 0;
   background: #222;
   color: #fff;
