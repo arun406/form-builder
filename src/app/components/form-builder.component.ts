@@ -1,7 +1,9 @@
-import { Component, ChangeDetectorRef } from '@angular/core';
+import { Component, ChangeDetectorRef, OnInit, OnDestroy, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ConfirmDeleteDialogComponent } from './confirm-delete-dialog.component';
+import { ElementCatalogComponent } from '../element-catalog/element-catalog.component';
+import { ActionBarComponent } from '../action-bar/action-bar.component';
 
 interface FormElementType {
   type: string;
@@ -27,16 +29,15 @@ interface FormElement {
 @Component({
   selector: 'app-form-builder',
   standalone: true,
-  imports: [CommonModule, FormsModule, ConfirmDeleteDialogComponent],
+  imports: [CommonModule, FormsModule, ConfirmDeleteDialogComponent, ElementCatalogComponent, ActionBarComponent],
   templateUrl: './form-builder.component.html',
   styleUrls: ['./form-builder.component.css']
 })
-export class FormBuilderComponent {
+export class FormBuilderComponent implements OnInit, OnDestroy {
   searchTerm = '';
 
   availableElements: FormElementType[] = [
-    // Grid
-    { type: 'grid-1', label: '1-Column', icon: '▢', category: 'Grid' },
+    
     // Basic Info
     { type: 'name', label: 'Name', icon: '👤', category: 'Basic Info' },
     { type: 'address', label: 'Address', icon: '📒', category: 'Basic Info' },
@@ -102,13 +103,39 @@ export class FormBuilderComponent {
   isDragging = false;
   activeDropZone: number | null = null;
   activeGridDropZoneId: string | null = null;
+  hoveredElementId: string | null = null;
+  private globalClickHandler = (event: MouseEvent) => {
+    const target = event.target as HTMLElement;
+    // If click is inside a form-element or action-bar, do nothing
+    if (target.closest('.form-element') || target.closest('.action-bar')) {
+      // If inside a form-element, set selectedElementId to hoveredElementId
+      if (target.closest('.form-element')) {
+        const formElementDiv = target.closest('.form-element');
+        if (formElementDiv && formElementDiv.hasAttribute('data-element-id')) {
+          this.selectedElementId = formElementDiv.getAttribute('data-element-id');
+        }
+      }
+      return;
+    }
+    this.hoveredElementId = null;
+    this.selectedElementId = null;
+    this.cdr.detectChanges();
+  };
 
   // Dialog state
   showDeleteDialog = false;
   elementIdToDelete: string | null = null;
   selectedElementId: string | null = null;
 
-  constructor(private cdr: ChangeDetectorRef) {}
+  constructor(private cdr: ChangeDetectorRef, private elRef: ElementRef) {}
+
+  ngOnInit() {
+    document.addEventListener('mousedown', this.globalClickHandler, true);
+  }
+
+  ngOnDestroy() {
+    document.removeEventListener('mousedown', this.globalClickHandler, true);
+  }
 
   setSelectedElement(id: string) {
     console.log('setSelectedElement called with:', id);
@@ -258,8 +285,17 @@ export class FormBuilderComponent {
     event.stopPropagation();
   }
 
-  onDeleteMouseDown(event: MouseEvent) {
-    event.preventDefault();
+  onSettingsClick(element: FormElement) {
+    // TODO: Implement settings click logic
+    console.log('Settings clicked for', element);
+  }
+
+  onDuplicateClick(element: FormElement) {
+    // TODO: Implement duplicate logic
+    console.log('Duplicate clicked for', element);
+  }
+
+  onDeleteMouseDown(event: Event) {
     event.stopPropagation();
   }
 
@@ -271,7 +307,6 @@ export class FormBuilderComponent {
   }
 
   showDeleteTestAlert(elementId: string, event: Event) {
-    alert('clicked');
     this.requestRemoveElement(elementId);
     event.stopPropagation();
   }
@@ -291,6 +326,7 @@ export class FormBuilderComponent {
   }
 
   confirmDelete() {
+    console.log('confirmDelete called, deleting', this.elementIdToDelete);
     if (this.elementIdToDelete) {
       this.removeElementById(this.formElements, this.elementIdToDelete);
     }

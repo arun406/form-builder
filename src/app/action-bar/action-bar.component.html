@@ -1,0 +1,19 @@
+<div class="action-bar">
+  <button class="action-btn" aria-label="Settings" title="Settings" (click)="deleteClicked($event)">
+    ⚙️
+    <span class="custom-tooltip">Settings</span>
+  </button>
+  <button class="action-btn" aria-label="Duplicate" title="Duplicate" (click)="duplicate.emit()">
+    🗐
+    <span class="custom-tooltip">Duplicate</span>
+  </button>
+  <button
+    class="action-btn"
+    aria-label="Delete Field"
+    title="Delete Field"
+    (click)="deleteClicked($event)"
+  >
+    🗑️
+    <span class="custom-tooltip">Delete Field</span>
+  </button>
+</div>
