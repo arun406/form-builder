@@ -23,6 +23,12 @@ export class ElementCatalogComponent {
   @Output() searchTermChange = new EventEmitter<string>();
   @Output() dragStart = new EventEmitter<{ event: DragEvent, element: FormElementType }>();
 
+  collapsed = false;
+
+  toggleCollapsed() {
+    this.collapsed = !this.collapsed;
+  }
+
   get filteredElements() {
     if (!this.searchTerm.trim()) return this.availableElements;
     const term = this.searchTerm.trim().toLowerCase();
