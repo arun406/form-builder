@@ -32,6 +32,7 @@
   border-bottom: none;
   padding: 0;
   position: relative;
+  font-size: 1rem;
 }
 .action-btn:last-child {
   border-bottom: none;
